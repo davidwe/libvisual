@@ -19,32 +19,19 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-/*#include "config.h"
-#include "gettext.h"
-#include "actor_dancingparticles.h"
-#include "gl.h"
-#include "fastmath.h"
-#include "etoile.h"
-#include <cmath>
-
-#ifdef USE_OPENGL_ES
-#include <GLES/gl.h>
-#else
-#include <GL/gl.h>
-#endif
-*/
+#include "actor_led.h"
 
 VISUAL_PLUGIN_API_VERSION_VALIDATOR
 
 namespace {
 
-  int         lv_dancingparticles_init        (VisPluginData *plugin);
-  void        lv_dancingparticles_cleanup     (VisPluginData *plugin);
-  void        lv_dancingparticles_requisition (VisPluginData *plugin, int *width, int *height);
-  void        lv_dancingparticles_resize      (VisPluginData *plugin, int width, int height);
-  int         lv_dancingparticles_events      (VisPluginData *plugin, VisEventQueue *events);
-  void        lv_dancingparticles_render      (VisPluginData *plugin, VisVideo *video, VisAudio *audio);
-  VisPalette *lv_dancingparticles_palette     (VisPluginData *plugin);
+  int         lv_led_init        (VisPluginData *plugin);
+  void        lv_led_cleanup     (VisPluginData *plugin);
+  void        lv_led_requisition (VisPluginData *plugin, int *width, int *height);
+  void        lv_led_resize      (VisPluginData *plugin, int width, int height);
+  int         lv_led_events      (VisPluginData *plugin, VisEventQueue *events);
+  void        lv_led_render      (VisPluginData *plugin, VisVideo *video, VisAudio *audio);
+  VisPalette *lv_led_palette     (VisPluginData *plugin);
 }
 
 
@@ -53,25 +40,25 @@ const VisPluginInfo *get_plugin_info ()
 {
 	static VisActorPlugin actor;
 
-	actor.requisition = lv_dancingparticles_requisition;
-	actor.palette     = lv_dancingparticles_palette;
-	actor.render      = lv_dancingparticles_render;
+	actor.requisition = lv_led_requisition;
+	actor.palette     = lv_led_palette;
+	actor.render      = lv_led_render;
 	actor.vidoptions.depth = VISUAL_VIDEO_DEPTH_GL;
 
 	static VisPluginInfo info;
 
 	info.type     = VISUAL_PLUGIN_TYPE_ACTOR;
-	info.plugname = "dancingparticles";
-	info.name     = "libvisual Dancing Particles plugin";
-	info.author   = N_("Original by: Pierre Tardy <tardyp@free.fr>, Port by: Dennis Smit <ds@nerds-incorporated.org>");
+	info.plugname = "led";
+	info.name     = "Libvisual LED plugin";
+	info.author   = "David <david@informatik.uni-bremen.de>";
 	info.version  = "0.1";
-	info.about    = N_("Libvisual Dancing Particles plugin");
-	info.help     =  N_("This plugin shows dancing particles");
+	info.about    = "Libvisual LED plugin";
+	info.help     =  "This plugin controls LEDs"; //TODO: Add more description
 	info.license  = VISUAL_PLUGIN_LICENSE_GPL,
 
-	info.init     = lv_dancingparticles_init;
-	info.cleanup  = lv_dancingparticles_cleanup;
-	info.events   = lv_dancingparticles_events;
+	info.init     = lv_led_init;
+	info.cleanup  = lv_led_cleanup;
+	info.events   = lv_led_events;
 	info.plugin   = &actor;
 
 	VISUAL_VIDEO_ATTR_OPTIONS_GL_ENTRY(actor.vidoptions, VISUAL_GL_ATTRIBUTE_RED_SIZE, 5);
@@ -86,16 +73,16 @@ const VisPluginInfo *get_plugin_info ()
 
 namespace {
 
-int lv_dancingparticles_init (VisPluginData *plugin)
+int lv_led_init (VisPluginData *plugin)
 {
     return true;
 }
 
-void lv_dancingparticles_cleanup (VisPluginData *plugin)
+void lv_led_cleanup (VisPluginData *plugin)
 {
 }
 
-void lv_dancingparticles_requisition (VisPluginData *plugin, int *width, int *height)
+void lv_led_requisition (VisPluginData *plugin, int *width, int *height)
 {
 	/*int reqw, reqh;
 
@@ -112,21 +99,19 @@ void lv_dancingparticles_requisition (VisPluginData *plugin, int *width, int *he
 	*height = reqh;*/
 }
 
-void lv_dancingparticles_resize (VisPluginData *plugin, int width, int height)
+void lv_led_resize (VisPluginData *plugin, int width, int height)
 {
 }
 
-int lv_dancingparticles_events (VisPluginData *plugin, VisEventQueue *events)
+int lv_led_events (VisPluginData *plugin, VisEventQueue *events)
 {
-	auto priv = static_cast<DancingParticlesPrivate*> (visual_plugin_get_private (plugin));
-
 	VisEvent ev;
-	VisParam *param;
+	//VisParam *param;
 
 	while (visual_event_queue_poll (events, &ev)) {
 		switch (ev.type) {
 			case VISUAL_EVENT_RESIZE:
-				//lv_dancingparticles_resize (plugin, ev.event.resize.width, ev.event.resize.height);
+				//lv_led_resize (plugin, ev.event.resize.width, ev.event.resize.height);
 				break;
 
 			case VISUAL_EVENT_PARAM:
@@ -144,12 +129,12 @@ int lv_dancingparticles_events (VisPluginData *plugin, VisEventQueue *events)
 	return true;
 }
 
-VisPalette *lv_dancingparticles_palette (VisPluginData *plugin)
+VisPalette *lv_led_palette (VisPluginData *plugin)
 {
 	return nullptr;
 }
 
-void lv_dancingparticles_render (VisPluginData *plugin, VisVideo *video, VisAudio *audio)
+void lv_led_render (VisPluginData *plugin, VisVideo *video, VisAudio *audio)
 {
 	const unsigned int size = 256;
 
@@ -165,11 +150,7 @@ void lv_dancingparticles_render (VisPluginData *plugin, VisVideo *video, VisAudi
 	for (unsigned int i = 0; i < size; i++)
 		freq[2][i] = (freq[0][i] + freq[1][i]) / 2;
 
-	/* FIXME on title change, do something */
-	dp_render_freq (freq);
-//	update_playlist_info ();
-	etoileLoop ();
-	draw_gl ();
+    // do_something (freq);
 }
 
 } // anonymous namespace

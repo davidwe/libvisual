@@ -21,9 +21,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#ifndef _ACTOR_DANCINGPARTICLES_H
-#define _ACTOR_DANCINGPARTICLES_H
+#ifndef _ACTOR_LED_H
+#define _ACTOR_LED_H
 
 #include <libvisual/libvisual.h>
 
-#endif /* _ACTOR_DANCINGPARTICLES_H */
+#endif /* _ACTOR_LED_H */
