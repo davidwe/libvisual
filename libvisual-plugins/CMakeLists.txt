@@ -144,6 +144,7 @@ OPTION(ENABLE_TENTACLE    "Build the Tentacle morph plugin" yes)
 OPTION(ENABLE_WAVEIN      "Build the Windows WaveIn plugin" yes)
 OPTION(ENABLE_CHECKERS    "Build the checkers morph plugin" yes)
 OPTION(ENABLE_LCDCONTROL  "Build the LCDControl actor plugin" yes)
+OPTION(ENABLE_LED         "Build the LED actor plugin" yes)
 
 
 # Check for plugin dependencies
