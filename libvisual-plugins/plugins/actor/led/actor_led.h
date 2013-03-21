@@ -1,8 +1,8 @@
 /* Libvisual-plugins - Standard plugins for libvisual
  * 
- * Copyright (C) 2004, 2005, 2006 Dennis Smit <ds@nerds-incorporated.org>
+ * Copyright (C) 2013 David <david@informatik.uni-bremen.de>
  *
- * Authors: Dennis Smit <ds@nerds-incorporated.org>
+ * Authors: David <david@informatik.uni-bremen.de>
  *
  * $Id: actor_dancingparticles.h,v 1.3 2006-01-22 13:25:24 synap Exp $
  *

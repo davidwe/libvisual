@@ -1,8 +1,10 @@
 /* Libvisual-plugins - Standard plugins for libvisual
  *
  * Copyright (C) 2004, 2005 Dennis Smit <ds@nerds-incorporated.org>
+ *               2013 David <david@informatik.uni-bremen.de>
  *
  * Authors: Dennis Smit <ds@nerds-incorporated.org>
+ *          David <david@informatik.uni-bremen.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
