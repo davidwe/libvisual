@@ -21,7 +21,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+//TODO: Check this header
+
 #include "actor_led.h"
+
+static const unsigned int LED_COUNT = 4;
 
 VISUAL_PLUGIN_API_VERSION_VALIDATOR
 
@@ -45,7 +49,7 @@ const VisPluginInfo *get_plugin_info ()
 	actor.requisition = lv_led_requisition;
 	actor.palette     = lv_led_palette;
 	actor.render      = lv_led_render;
-	actor.vidoptions.depth = VISUAL_VIDEO_DEPTH_GL;
+	actor.vidoptions.depth = VISUAL_VIDEO_DEPTH_8BIT;
 
 	static VisPluginInfo info;
 
@@ -62,13 +66,6 @@ const VisPluginInfo *get_plugin_info ()
 	info.cleanup  = lv_led_cleanup;
 	info.events   = lv_led_events;
 	info.plugin   = &actor;
-
-	VISUAL_VIDEO_ATTR_OPTIONS_GL_ENTRY(actor.vidoptions, VISUAL_GL_ATTRIBUTE_RED_SIZE, 5);
-	VISUAL_VIDEO_ATTR_OPTIONS_GL_ENTRY(actor.vidoptions, VISUAL_GL_ATTRIBUTE_GREEN_SIZE, 5);
-	VISUAL_VIDEO_ATTR_OPTIONS_GL_ENTRY(actor.vidoptions, VISUAL_GL_ATTRIBUTE_BLUE_SIZE, 5);
-	VISUAL_VIDEO_ATTR_OPTIONS_GL_ENTRY(actor.vidoptions, VISUAL_GL_ATTRIBUTE_DEPTH_SIZE, 16);
-	VISUAL_VIDEO_ATTR_OPTIONS_GL_ENTRY(actor.vidoptions, VISUAL_GL_ATTRIBUTE_DOUBLEBUFFER, 1);
-	VISUAL_VIDEO_ATTR_OPTIONS_GL_ENTRY(actor.vidoptions, VISUAL_GL_ATTRIBUTE_RGBA, 1);
 
 	return &info;
 }
@@ -136,9 +133,22 @@ VisPalette *lv_led_palette (VisPluginData *plugin)
 	return nullptr;
 }
 
+void lv_led_draw(VisVideo *video, LV::Color (&colors)[LED_COUNT])
+{
+	const int width = video->get_width() / LED_COUNT;
+	LV::Rect area(0, 0, width, video->get_height());
+
+	for (unsigned int i = 0; i < LED_COUNT; i++)
+	{
+		video->fill_color ( colors[i], area );
+		area.y += width;
+	}
+}
+
+
 void lv_led_render (VisPluginData *plugin, VisVideo *video, VisAudio *audio)
 {
-	const unsigned int size = 256;
+	/*const unsigned int size = LED_COUNT;
 
 	float freq[3][size];
 
@@ -151,8 +161,14 @@ void lv_led_render (VisPluginData *plugin, VisVideo *video, VisAudio *audio)
 
 	for (unsigned int i = 0; i < size; i++)
 		freq[2][i] = (freq[0][i] + freq[1][i]) / 2;
+*/
+	LV::Color colors[LED_COUNT];
+	for (unsigned int i = 0; i < LED_COUNT; i++)
+	{
+		colors[i] = LV::Color(30*i,0,0);
+	}
 
-    // do_something (freq);
+	lv_led_draw(video, colors);
 }
 
 } // anonymous namespace
