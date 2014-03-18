@@ -90,8 +90,10 @@ const VisPluginInfo *get_plugin_info (void)
 
 static int act_gdkpixbuf_init (VisPluginData *plugin)
 {
-    /* Initialize GObjects, needed for GdkPixbuf */
+#if GLIB_VERSION_CUR_STABLE < GLIB_VERSION_2_36
+    /* Initialize GObjects, needed for GdkPixbuf if Glib < 2.36 */
     g_type_init ();
+#endif
 
 #if ENABLE_NLS
     bindtextdomain (GETTEXT_PACKAGE, LOCALE_DIR);
@@ -382,7 +384,7 @@ static VisVideo *visvideo_from_gdkpixbuf (GdkPixbuf *src)
 	int width  = gdk_pixbuf_get_width (src);
 	int height = gdk_pixbuf_get_height (src);
 
-	VisVideoDepth depth = visual_video_depth_enum_from_value (gdk_pixbuf_get_n_channels (src) * 8);
+	VisVideoDepth depth = visual_video_depth_from_bpp (gdk_pixbuf_get_n_channels (src) * 8);
 
 	/* Wrap GdkPixbuf's pixel buffer in VisVideo */
 	VisVideo *bgr = visual_video_new_wrap_buffer (gdk_pixbuf_get_pixels (src),

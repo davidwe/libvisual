@@ -43,7 +43,6 @@ namespace LV {
       bool         use_morph;
       MorphPtr     morph;
       bool         morphing;
-      VisMorphMode morphmode;
       Time         morphtime;
 
       VisBinDepth   depthpreferred;    /* Prefered depth, highest or lowest */
@@ -183,7 +182,7 @@ namespace LV {
       if (depthflag == VISUAL_VIDEO_DEPTH_GL) {
           set_depth (VISUAL_VIDEO_DEPTH_GL);
       } else {
-          set_depth (m_impl->get_suitable_depth(depthflag));
+          set_depth (m_impl->get_suitable_depth (depthflag));
       }
 
       m_impl->depthforcedmain = m_impl->depth;
@@ -460,7 +459,7 @@ namespace LV {
 
           visual_log (VISUAL_LOG_INFO, "Target depth selected: %d", depth);
 
-          video->set_pitch(video->get_width() * visual_video_bpp_from_depth(depth));
+          video->set_pitch(video->get_width() * (visual_video_depth_bpp(depth) >> 3));
 
           video->allocate_buffer();
       }
@@ -503,7 +502,6 @@ namespace LV {
           if (m_impl->morph) {
               m_impl->morph->set_progress (0.0f);
               m_impl->morph->set_video (m_impl->actvideo);
-              m_impl->morph->set_mode (VISUAL_MORPH_MODE_TIME);
               m_impl->morph->set_time (m_impl->morphtime);
           }
 

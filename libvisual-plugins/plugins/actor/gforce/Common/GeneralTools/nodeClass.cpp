@@ -907,33 +907,6 @@ void nodeClass::RandomizeSubs() {
 
 
 
-
-
-/* FIXME use VisRandomContext */
 long nodeClass::Rnd( long min, long max ) {
-	long maxRnd 	= std::numeric_limits<uint32_t>::max();
-	long retNum;
-
-	LV::Time curTime = LV::Time::now ();
-
-	srand (curTime.nsec + curTime.sec);
-	retNum = LV::rand() / (maxRnd / (max - min + 1)) + min;
-
-	if ( retNum >= max )
-		return max;
-	else
-		return retNum;
+	return LV::rand() % (max - min + 1) + min;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

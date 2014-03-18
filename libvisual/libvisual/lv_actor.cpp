@@ -174,7 +174,7 @@ namespace LV {
                           visual_video_depth_name (m_impl->run_depth),
                           visual_video_depth_name (output_depth));
 
-              m_impl->to_convert = Video::create (output_width, output_height, m_impl->run_depth);
+              m_impl->to_convert = Video::create (run_width, run_height, m_impl->run_depth);
           }
 
           // Configure any necessary scaling
